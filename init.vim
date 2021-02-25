@@ -179,4 +179,8 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+"Disable godef from go-vim and deligate its function to Coc.
 let g:go_def_mapping_enabled=0
+"Run GoFmt and GoImports on save
+autocmd FileType go autocmd BufWritePre <buffer> GoFmt
+autocmd FileType go autocmd BufWritePre <buffer> GoImports
