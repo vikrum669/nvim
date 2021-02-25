@@ -2,7 +2,11 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'fatih/vim-go'
 Plug 'szw/vim-g'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'voldikss/vim-floaterm'
 call plug#end()
+
+source $HOME/.config/nvim/plug-config/floatterm.vim
+source $HOME/.config/nvim/plug-config/coc.vim
 
 set background=dark
 

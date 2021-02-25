@@ -26,7 +26,6 @@
   } ,
   "explorer.width": 40,
   "explorer.icon.enableNerdfont": true,
-  "explorer.previewAction.onHover": true,
   "explorer.keyMappings.global": {
     "<cr>": ["expandable?", "expand", "open"],
     "v": "open:vsplit"
