@@ -1,21 +1,55 @@
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd!
+  autocmd VimEnter * PlugInstall
+endif
+
 call plug#begin('~/.config/nvim/plugged')
+"Color:
+Plug 'tomasiser/vim-code-dark'
+"Golang:
 Plug 'fatih/vim-go'
-Plug 'szw/vim-g'
+"Autocomplete:
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"FloatTerminal:
 Plug 'voldikss/vim-floaterm'
+"Snippets:
+Plug 'ncm2/ncm2-ultisnips'
+Plug 'SirVer/ultisnips'
+"Git:
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 source $HOME/.config/nvim/plug-config/floatterm.vim
-source $HOME/.config/nvim/plug-config/coc.vim
 
-set background=dark
+"COPY/PASTE:
+"-----------
+"Increases the memory limit from 50 lines to 1000 lines
+:set viminfo='100,<1000,s10,h
 
-filetype on 
-filetype plugin on
-filetype indent on
-set number
+"NUMBERING:
+"----------
+:set number
 
+"INDENTATION:
+"------------
+"Highlights code for multiple indents without reselecting
+vnoremap < <gv
+vnoremap > >gv
 
+"COLOR:
+"------
+set t_Co=256
+set t_ut=
+colorscheme codedark
+
+"AUTO IMPORT:
+"------------
+let g:go_fmt_command = "goimports"
+
+"AUTOCOMPLETE:
+"-------------
 "COC completion
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
@@ -188,3 +222,87 @@ let g:go_def_mapping_enabled=0
 "Run GoFmt and GoImports on save
 autocmd FileType go autocmd BufWritePre <buffer> GoFmt
 autocmd FileType go autocmd BufWritePre <buffer> GoImports
+
+"SNIPPETS:
+"---------
+"Change default expand since TAB is used to cycle options
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+"FILE SEARCH:
+"------------
+"allows FZF to open by pressing CTRL-F
+map <C-p> :FZF<CR>
+"allow FZF to search hidden 'dot' files
+let $FZF_DEFAULT_COMMAND = "find -L"
+
+"FILE BROWSER:
+"-------------
+"allows NERDTree to open/close by typing 'n' then 't'
+map nt :NERDTreeTabsToggle<CR>
+"Start NERDtree when dir is selected (e.g. "vim .") and start NERDTreeTabs
+let g:nerdtree_tabs_open_on_console_startup=2
+"Add a close button in the upper right for tabs
+let g:tablineclosebutton=1
+"Automatically find and select currently opened file in NERDTree
+let g:nerdtree_tabs_autofind=1
+"Add folder icon to directories
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+"Hide expand/collapse arrows
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ""
+highlight! link NERDTreeFlags NERDTreeDir
+
+"SHORTCUTS:
+"----------
+"Open file at same line last closed
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+  \| exe "normal! g'\"" | endif
+endif
+
+"SOURCING:
+"---------
+"Automatically reloads neovim configuration file on write (w)
+autocmd! bufwritepost init.vim source %
+
+"MOUSE:
+"------
+"Allow using mouse helpful for switching/resizing windows
+set mouse+=a
+if &term =~ '^screen'
+  " tmux knows the extended mouse mode
+  set ttymouse=xterm2
+endif
+
+"TEXT SEARCH:
+"------------
+"Makes Search Case Insensitive
+set ignorecase
+
+"SWAP:
+"-----
+set dir=~/.local/share/nvim/swap/
+
+"GIT (FUGITIVE):
+"---------------
+map fgb :Gblame<CR>
+map fgs :Gstatus<CR>
+map fgl :Glog<CR>
+map fgd :Gdiff<CR>
+map fgc :Gcommit<CR>
+map fga :Git add %:p<CR>
+
+"SYNTAX HIGHLIGHTING:
+"--------------------
+syntax on
+
+"HIGHLIGHTING:
+"-------------
+" <Ctrl-l> redraws the screen and removes any search highlighting.
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+" Highlight the current line the cursor is on
+set cursorline
